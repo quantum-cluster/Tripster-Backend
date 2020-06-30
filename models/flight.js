@@ -7,6 +7,10 @@ const flightSchema = new mongoose.Schema({
         type: String,
         maxlength: 32
     },
+    category: {
+        type: ObjectId,
+        ref: "Flight_Category"
+    },
     seats_count: {
         type: Number
     },
@@ -23,8 +27,12 @@ const flightSchema = new mongoose.Schema({
     },
     arrival_time: {
         type: Date
+    },
+    travellers_list: {
+        type: Array,
+        default: []
     }
-})
+}, {timestamps: true})
 
 flightSchema.virtual("duration")
     .get(function () {
