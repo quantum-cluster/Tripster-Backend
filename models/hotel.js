@@ -14,6 +14,17 @@ const hotelSchema = new mongoose.Schema({
         required: true,
         trim: true
     },
+    price: {
+        type: Number,
+        required: true,
+        maxlength: 32,
+        trim: true
+    },
+    description: {
+        type: String,
+        maxlength: 2000,
+        trim: true
+    },
     category: {
         type: ObjectId,
         ref: "Hotel_Category"

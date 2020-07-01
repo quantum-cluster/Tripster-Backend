@@ -16,7 +16,8 @@ exports.register = (req, res) => {
     const user = new User(req.body)
     user.save((err, user) => {
         if (err) {
-            return res.status(400).json({
+            return res.json({
+                message: "Error in saving to database",
                 error: err
             })
         }
@@ -31,8 +32,6 @@ exports.register = (req, res) => {
             email: email,
             id: _id
         })
-    }).then(() => {
-        console.log("Successfully registered User.")
     })
 }
 
@@ -59,9 +58,9 @@ exports.login = (req, res) => {
                 error: "User doesn't exist!"
             })
         }
-        const {authenticate, _id, fName, lName, email, role} = foundUser;
+        const {_id, fName, lName, email, role} = foundUser;
         if (foundUser) {
-            if (!authenticate(password)) {
+            if (!foundUser.authenticate(password)) {
                 return res.status(401).json({
                     error: "Email and Password don't match!"
                 })
@@ -100,11 +99,12 @@ exports.logout = (req, res) => {
 //////////// CUSTOM MIDDLEWARE
 exports.isLoggedIn = expressJwt({
     secret: process.env.SECRET,
-    userProperty: "auth"
+    userProperty: "auth",
+    algorithms: ['HS256']   // It changes on the purpose, if you want to use it for session, you can use HSXXX types. If you want to use it for cross application authentication(like oauth) etc., you can prefer RSXXX types. RS types are digital signatures, HS types are not.
 })
 
 exports.isAuthenticated = (req, res, next) => {
-    let checker = req.profile && req.auth && req.profile._id.toString() === req.auth._id.toString()
+    let checker = req.profile && req.auth && req.profile._id == req.auth._id
     if (!checker) {
         return res.status(403).json({
             error: "ACCESS DENIED!"

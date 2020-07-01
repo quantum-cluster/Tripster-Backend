@@ -1,17 +1,10 @@
 const mongoose = require("mongoose");
 const {ObjectId} = mongoose.Schema;
 
-const itemsInCartSchema = new mongoose.Schema({
-    flight: {
-        type: ObjectId,
-        ref: "Flight"
-    },
+const hotelInCartSchema = new mongoose.Schema({
     hotel: {
         type: ObjectId,
         ref: "Hotel"
-    },
-    flight_name: {
-        type: String
     },
     hotel_name: {
         type: String
@@ -24,11 +17,29 @@ const itemsInCartSchema = new mongoose.Schema({
     }
 })
 
-const ItemsInCart = mongoose.model("ItemsInCart", itemsInCartSchema);
+const HotelInCart = mongoose.model("HotelInCart", hotelInCartSchema);
+
+
+const flightInCartSchema = new mongoose.Schema({
+    flight: {
+        type: ObjectId,
+        ref: "Flight"
+    },
+    flight_name: {
+        type: String
+    },
+    price: {
+        type: Number
+    }
+})
+
+const FlightInCart = mongoose.model("FlightInCart", flightInCartSchema);
 
 const orderSchema = new mongoose.Schema({
-    purchases: [itemsInCartSchema],
-    transaction_id: {},
+    flights: [flightInCartSchema],
+    hotels: [hotelInCartSchema],
+    flights_transaction_id: {},
+    hotels_transaction_id: {},
     amount: {
         type: Number
     },
@@ -46,4 +57,4 @@ const orderSchema = new mongoose.Schema({
 
 const Order = mongoose.model("Order", orderSchema)
 
-module.exports = {Order, ItemsInCart}
+module.exports = {Order, HotelInCart, FlightInCart}

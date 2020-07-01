@@ -12,5 +12,6 @@
     <orderEntry type="library" name="@types/express" level="application" />
     <orderEntry type="library" name="@types/mongoose" level="application" />
     <orderEntry type="library" name="@types/node" level="application" />
+    <orderEntry type="library" name="@types/mongodb" level="application" />
   </component>
 </module>
