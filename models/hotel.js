@@ -38,13 +38,24 @@ const hotelSchema = new mongoose.Schema({
     street_address: {
         type: String,
         maxlength: 200,
-        required: false,
         trim: true
     },
     guest_list: {
         type: Array,
         default: []
+    },
+    total_rooms: {
+        type: Number,
+        required: true
+    },
+    rooms_occupied: {
+        type: Number
     }
 })
+
+hotelSchema.virtual("rooms_available")
+    .get(function () {
+        return (this.total_rooms - this.rooms_occupied);
+    })
 
 module.exports = new mongoose.model("Hotel", hotelSchema)

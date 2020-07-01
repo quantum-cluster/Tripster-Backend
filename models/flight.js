@@ -28,7 +28,8 @@ const flightSchema = new mongoose.Schema({
         trim: true
     },
     total_seats_count: {
-        type: Number
+        type: Number,
+        required: true
     },
     seats_sold: {
         type: Number
@@ -60,7 +61,7 @@ flightSchema.virtual("duration")
     })
 flightSchema.virtual("seats_remaining")
     .get(function () {
-        return this.total_seats_count - this.seats_sold;
+        return (this.total_seats_count - this.seats_sold);
     })
 
 module.exports = mongoose.model("Flight", flightSchema)

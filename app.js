@@ -12,6 +12,7 @@ const app = express();
 // Path imports 👇
 const authRoutes = require("./routes/auth")
 const userRoutes = require("./routes/user")
+const hotelRoutes = require("./routes/hotel")
 
 // Middleware 👇
 app.use(cors());
@@ -36,6 +37,7 @@ mongoose.connect(
 // My Routes 👇
 app.use("/api", authRoutes)
 app.use("/api", userRoutes)
+app.use("/api", hotelRoutes)
 
 app.listen(PORT, () => {
     console.log(`Port listening on http://localhost:${PORT}`)
