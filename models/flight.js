@@ -5,7 +5,8 @@ const DateDiff = require("date-diff");
 const flightSchema = new mongoose.Schema({
     brand: {
         type: String,
-        maxlength: 32
+        maxlength: 32,
+        required: true
     },
     name: {
         type: String,
@@ -20,7 +21,8 @@ const flightSchema = new mongoose.Schema({
     },
     category: {
         type: ObjectId,
-        ref: "Flight_Category"
+        ref: "Flight_Category",
+        required: true
     },
     description: {
         type: String,
@@ -36,14 +38,16 @@ const flightSchema = new mongoose.Schema({
     },
     source: {
         type: String,
-        maxlength: 32
+        maxlength: 32,
+        required: true
     },
     departure_time: {
         type: Date
     },
     destination: {
         type: String,
-        maxlength: 32
+        maxlength: 32,
+        required: true
     },
     arrival_time: {
         type: Date
