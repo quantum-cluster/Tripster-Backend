@@ -13,6 +13,7 @@ const app = express();
 const authRoutes = require("./routes/auth")
 const userRoutes = require("./routes/user")
 const hotelRoutes = require("./routes/hotel")
+const hotelCategoryRoutes = require("./routes/hotel_category")
 
 // Middleware 👇
 app.use(cors());
@@ -38,6 +39,7 @@ mongoose.connect(
 app.use("/api", authRoutes)
 app.use("/api", userRoutes)
 app.use("/api", hotelRoutes)
+app.use("/api", hotelCategoryRoutes)
 
 app.listen(PORT, () => {
     console.log(`Port listening on http://localhost:${PORT}`)

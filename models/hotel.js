@@ -50,6 +50,10 @@ const hotelSchema = new mongoose.Schema({
     },
     rooms_occupied: {
         type: Number
+    },
+    photo: {
+        data: Buffer,
+        contentType: String,
     }
 })
 
