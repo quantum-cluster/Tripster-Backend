@@ -16,6 +16,7 @@ const hotelRoutes = require("./routes/hotel")
 const flightRoutes = require("./routes/hotel")
 const hotelCategoryRoutes = require("./routes/hotel_category")
 const flightCategoryRoutes = require("./routes/flight_category")
+const orderRoutes = require("./routes/order")
 
 // Middleware 👇
 app.use(cors());
@@ -44,6 +45,7 @@ app.use("/api", hotelRoutes)
 app.use("/api", flightRoutes)
 app.use("/api", hotelCategoryRoutes)
 app.use("/api", flightCategoryRoutes)
+app.use("/api", orderRoutes)
 
 app.listen(PORT, () => {
     console.log(`Port listening on http://localhost:${PORT}`)
