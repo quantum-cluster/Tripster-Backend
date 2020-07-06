@@ -153,7 +153,7 @@ exports.updateHotel = (req, res) => {
 }
 
 exports.getAllHotels = (req, res) => {
-    let limit = req.query.limit ? parseInt(req.query.limit) : 8;
+    let limit = req.query.limit ? parseInt(req.query.limit) : undefined;
     let sortBy = req.query.sortBy ? req.query.sortBy : "_id";
 
     Hotel.find({})

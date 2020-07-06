@@ -8,6 +8,7 @@ const expressJwt = require("express-jwt");
 exports.register = (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
+        console.log("req.body for register: ", req.body)
         return res.status(422).json({
             error: errors.array()[0].msg,
             param: errors.array()[0].param

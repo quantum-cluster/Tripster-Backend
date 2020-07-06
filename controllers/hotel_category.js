@@ -50,7 +50,7 @@ exports.getAllHotelCategories = (req, res) => {
                 error: "No categories exist."
             })
         }
-        res.json(foundHotelCategories)
+        res.json(foundHotelCategories);
     })
 }
 

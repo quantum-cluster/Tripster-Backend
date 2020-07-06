@@ -22,19 +22,18 @@ exports.getFlightById = (req, res, next, id) => {
 
 exports.createFlight = (req, res) => {
     const flight = new Flight(req.body);
-
-    flight.save((err, createdFlight) => {
+    flight.save((err, savedFlight) => {
         if (err) {
             return res.status(400).json({
                 error: err
             })
         }
-        if (!createdFlight) {
-            return res.status(500).json({
-                error: "Internal Server Error: Couldn't create the flight 😟"
+        if (!savedFlight) {
+            return res.status(400).json({
+                error: "Couldn't save the flight."
             })
         }
-        res.json(createdFlight)
+        res.json(savedFlight);
     })
 }
 
@@ -70,17 +69,17 @@ exports.updateFlight = (req, res) => {
             })
         }
         if (!updatedFlight) {
-            return res.status(404).json({
-                error: "No such flight exists."
+            return res.status(500).json({
+                error: "Couldn't update the Flight."
             })
         }
-        res.json(updatedFlight)
+        res.json(updatedFlight);
     })
 }
 
 exports.getAllFlights = (req, res) => {
     let limit = req.query.limit ? parseInt(req.query.limit) : 8;
-    let sortBy = req.query.sortBy ? req.query.sortBy :"_id";
+    let sortBy = req.query.sortBy ? req.query.sortBy : "_id";
 
     Flight.find({})
         .populate("category")

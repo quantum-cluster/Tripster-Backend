@@ -38,8 +38,7 @@ const FlightInCart = mongoose.model("FlightInCart", flightInCartSchema);
 const orderSchema = new mongoose.Schema({
     flights: [flightInCartSchema],
     hotels: [hotelInCartSchema],
-    flights_transaction_id: {},
-    hotels_transaction_id: {},
+    transaction_id: {},
     amount: {
         type: Number
     },
