@@ -14,6 +14,12 @@ const hotelInCartSchema = new mongoose.Schema({
     },
     price: {
         type: Number
+    },
+    checkin_datetime: {
+        type: Date
+    },
+    checkout_datetime: {
+        type: Date
     }
 })
 
@@ -30,6 +36,9 @@ const flightInCartSchema = new mongoose.Schema({
     },
     price: {
         type: Number
+    },
+    travel_date: {
+        type: Date
     }
 })
 
