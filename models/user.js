@@ -46,6 +46,11 @@ const userSchema = new mongoose.Schema({
     },
     complimentary_breakfast: {
         type: Boolean
+    },
+    photo: {
+        data: Buffer,
+        contentType: String,
+        default: Object
     }
 }, {timestamps: true})
 

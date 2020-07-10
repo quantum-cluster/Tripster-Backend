@@ -1,5 +1,8 @@
 const User = require("../models/user");
 const Order = require("../models/order");
+const formidable = require("formidable");
+const _ = require("lodash");
+const fs = require("fs");
 
 exports.getUserById = (req, res, next, id) => {
     User.findById(id).exec((err, foundUser) => {
@@ -26,11 +29,37 @@ exports.getUser = (req, res) => {
 }
 
 exports.updateUser = (req, res) => {
-    User.findByIdAndUpdate(
-        req.profile._id,
-        {$set: req.body},
-        {new: true, useFindAndModify: false},
-        (err, updatedUser) => {
+    let form = new formidable.IncomingForm();
+    form.keepExtensions = true;
+
+    form.parse(req, (err, fields, file) => {
+        if (err) {
+            return res.json(400).json({
+                error: err
+            })
+        }
+
+        let user = req.profile
+
+        // Updation code
+        // Add/Merge all the fields in the 'fields(from formidable)' to the fields in the 'user'
+        user = _.extend(user, fields)
+
+        // Handle File here.
+        if (file.photo) {
+            if (file.photo.size > 3000000) {
+                return res.status(400).json({
+                    error: "The maximum allowed file size is 3MB."
+                })
+            }
+
+            // If the file being uploaded is < 3MB.
+            user.photo.data = fs.readFileSync(file.photo.path);
+            user.photo.contentType = file.photo.type;
+        }
+
+        // Save to DB
+        user.save((err, updatedUser) => {
             if (err) {
                 return res.status(400).json({
                     error: err
@@ -38,16 +67,36 @@ exports.updateUser = (req, res) => {
             }
             if (!updatedUser) {
                 return res.status(404).json({
-                    error: "User doesn't exist!"
+                    error: "No such user exists"
                 })
             }
-            updatedUser.encryptedPassword = undefined;
-            updatedUser.createdAt = undefined;
-            updatedUser.updatedAt = undefined;
-            return res.json(updatedUser);
-        }
-    )
+            res.json(updatedUser)
+        })
+    })
 }
+// exports.updateUser = (req, res) => {
+//     User.findByIdAndUpdate(
+//         req.profile._id,
+//         {$set: req.body},
+//         {new: true, useFindAndModify: false},
+//         (err, updatedUser) => {
+//             if (err) {
+//                 return res.status(400).json({
+//                     error: err
+//                 })
+//             }
+//             if (!updatedUser) {
+//                 return res.status(404).json({
+//                     error: "User doesn't exist!"
+//                 })
+//             }
+//             updatedUser.encryptedPassword = undefined;
+//             updatedUser.createdAt = undefined;
+//             updatedUser.updatedAt = undefined;
+//             return res.json(updatedUser);
+//         }
+//     )
+// }
 
 exports.userPurchaseList = (req, res) => {
     Order.find({user: req.profile._id})
@@ -72,22 +121,26 @@ exports.pushOrderInPurchaseList = (req, res, next) => {
     let hotel_purchases = [];
 
     req.body.order.flights.forEach(flight => {
-        let {_id, name, description} = flight;
+        let {_id, brand, name, description, category} = flight;
         flight_purchases.push({
             _id: _id,
+            brand: brand,
             name: name,
             description: description,
+            category: category
             // amount: req.body.order.amount,
             // flights_transaction_id: req.body.order.flights_transaction_id
         })
     })
 
     req.body.order.hotels.forEach(hotel => {
-        let {_id, name, description} = hotel;
+        let {_id, brand, name, description, category} = hotel;
         hotel_purchases.push({
             _id: _id,
+            brand: brand,
             name: name,
             description: description,
+            category: category
             // amount: req.body.order.amount,
             // hotels_transaction_id: req.body.order.hotels_transaction_id
         })

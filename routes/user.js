@@ -12,7 +12,7 @@ router.get("/user/:userId", isLoggedIn, isAuthenticated, getUser)
 // Update User
 router.put("/user/:userId", isLoggedIn, isAuthenticated, updateUser)
 
-// User's Flight Purchase List
+// User's Purchase List
 router.get("/orders/user/:userId", isLoggedIn, isAuthenticated, userPurchaseList)
 
 module.exports = router;

@@ -2,39 +2,100 @@ const User = require("../models/user");
 const {validationResult} = require("express-validator");
 const jwt = require("jsonwebtoken");
 const expressJwt = require("express-jwt");
+const formidable = require("formidable");
+// const _ = require("lodash");
+const fs = require("fs");
 
 ////////////////////////////////////////////////////////////////////////////
 //////////// REGISTER
+
 exports.register = (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        console.log("req.body for register: ", req.body)
-        return res.status(422).json({
-            error: errors.array()[0].msg,
-            param: errors.array()[0].param
-        })
-    }
-    const user = new User(req.body)
-    user.save((err, user) => {
+    // const errors = validationResult(req);
+    // if (!errors.isEmpty()) {
+    //     console.log("req.body for register: ", req.body)
+    //     return res.status(422).json({
+    //         error: errors.array()[0].msg,
+    //         param: errors.array()[0].param
+    //     })
+    // }
+
+    let form = formidable.IncomingForm();
+    form.keepExtensions = true;
+
+    form.parse(req, (err, fields, file) => {
         if (err) {
-            return res.json({
-                message: "Error in saving to database",
+            return res.status(400).json({
                 error: err
             })
         }
-        if (!user) {
-            return res.json({
-                error: "Couldn't register. Failure from Backend."
-            })
+
+        let user = new User(fields)
+
+        // Handle File here.
+        if (file.photo) {
+            if (file.photo > 3000000) {
+                return res.status(400).json({
+                    error: "Maximum allowed file size is 3MB."
+                })
+            }
+
+            // If the file being uploaded is < 3MB
+            user.photo.data = fs.readFileSync(file.photo.path);
+            user.photo.contentType = file.photo.type;
         }
-        const {fName, lName, email, _id} = user;
-        res.json({
-            name: `${fName} ${lName}`,
-            email: email,
-            id: _id
+
+        // Save to DB
+        user.save((err, savedUser) => {
+            if (err) {
+                return res.status(400).json({
+                    error: err
+                })
+            }
+            if (!savedUser) {
+                return res.status(404).json({
+                    error: "Couldn't save to database."
+                })
+            }
+            const {fName, lName, email, _id} = user;
+            res.json({
+                name: `${fName} ${lName}`,
+                email: email,
+                id: _id
+            })
         })
     })
 }
+
+// exports.register = (req, res) => {
+//     const errors = validationResult(req);
+//     if (!errors.isEmpty()) {
+//         console.log("req.body for register: ", req.body)
+//         return res.status(422).json({
+//             error: errors.array()[0].msg,
+//             param: errors.array()[0].param
+//         })
+//     }
+//     const user = new User(req.body)
+//     user.save((err, user) => {
+//         if (err) {
+//             return res.json({
+//                 message: "Error in saving to database",
+//                 error: err
+//             })
+//         }
+//         if (!user) {
+//             return res.json({
+//                 error: "Couldn't register. Failure from Backend."
+//             })
+//         }
+//         const {fName, lName, email, _id} = user;
+//         res.json({
+//             name: `${fName} ${lName}`,
+//             email: email,
+//             id: _id
+//         })
+//     })
+// }
 
 ////////////////////////////////////////////////////////////////////////////
 //////////// LOGIN
