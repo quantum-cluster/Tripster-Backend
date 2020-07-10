@@ -35,6 +35,7 @@ exports.createOrder = (req, res) => {
                 error: "Internal Server Error: Couldn't create order."
             })
         }
+        res.json(savedOrder)
     })
 }
 

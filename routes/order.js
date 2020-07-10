@@ -23,8 +23,8 @@ router.post(
     isLoggedIn,
     isAuthenticated,
     pushOrderInPurchaseList,
-    updateSeats,
-    updateRooms,
+    // updateSeats,
+    // updateRooms,
     createOrder
 )
 

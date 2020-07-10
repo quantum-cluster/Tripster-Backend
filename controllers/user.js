@@ -77,8 +77,8 @@ exports.pushOrderInPurchaseList = (req, res, next) => {
             _id: _id,
             name: name,
             description: description,
-            amount: req.body.order.amount,
-            flights_transaction_id: req.body.order.flights_transaction_id
+            // amount: req.body.order.amount,
+            // flights_transaction_id: req.body.order.flights_transaction_id
         })
     })
 
@@ -88,48 +88,35 @@ exports.pushOrderInPurchaseList = (req, res, next) => {
             _id: _id,
             name: name,
             description: description,
-            amount: req.body.order.amount,
-            hotels_transaction_id: req.body.order.hotels_transaction_id
+            // amount: req.body.order.amount,
+            // hotels_transaction_id: req.body.order.hotels_transaction_id
         })
     })
 
     // Store both arrays in a DB.
-    User.findOneAndUpdate(
+    User.findByIdAndUpdate(
         {_id: req.profile._id},
-        {$push: {flight_purchases: flight_purchases}},
+        {
+            $push: {
+                flight_purchases: flight_purchases,
+                hotel_purchases: hotel_purchases
+            }
+        },
         {new: true},
         (err, updatedPurchases) => {
             if (err) {
                 return res.status(400).json({
-                    error: err
+                    error: err.body
                 })
             }
-            if (!updatedPurchases) {
-                return res.status(404).json({
-                    error: "Could not update the purchases list."
-                })
-            }
-            res.json(updatedPurchases)
-            next();
-        }
-    )
 
-    User.findOneAndUpdate(
-        {_id: req.profile._id},
-        {$push: {hotel_purchases: hotel_purchases}},
-        {new: true},
-        (err, updatedPurchases) => {
-            if (err) {
-                return res.status(400).json({
-                    error: err
-                })
-            }
             if (!updatedPurchases) {
                 return res.status(404).json({
-                    error: "Could not update the purchases list."
+                    message: "Could not update the purchases list"
                 })
             }
-            res.json(updatedPurchases)
+
+            // res.json(updatedPurchases);
             next();
         }
     )

@@ -52,10 +52,10 @@ const hotelSchema = new mongoose.Schema({
         type: Number
     },
     checkin_datetime: {
-        type: Date
+        type: String
     },
     checkout_datetime: {
-        type: Date
+        type: String
     },
     photo: {
         data: Buffer,
