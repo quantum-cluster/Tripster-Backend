@@ -25,7 +25,16 @@ exports.getUser = (req, res) => {
     req.profile.encryptedPassword = undefined;
     req.profile.createdAt = undefined;
     req.profile.updatedAt = undefined;
+    req.profile.photo = undefined;
     return res.json(req.profile);
+}
+
+exports.photo = (req, res, next) => {
+    if (req.profile.photo.data) {
+        res.set("Content-Type", req.hotel.photo.contentType);
+        return res.send(req.hotel.photo.data);
+    }
+    next();
 }
 
 exports.updateUser = (req, res) => {
