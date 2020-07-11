@@ -10,6 +10,7 @@ const {
     updateHotel,
     getAllHotels,
     getAllUniqueCategories,
+    getAllUniqueCities,
     updateRooms
 } = require("../controllers/hotel");
 const {getUserById} = require("../controllers/user");
@@ -36,5 +37,6 @@ router.delete("/hotel/:hotelId/:userId", isLoggedIn, isAuthenticated, isAdmin, r
 // Listing
 router.get("/hotels", getAllHotels)
 router.get("/hotels/categories", getAllUniqueCategories)
+router.get("/hotels/cities", getAllUniqueCities)
 
 module.exports = router;

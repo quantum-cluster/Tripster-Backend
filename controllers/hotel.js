@@ -192,6 +192,22 @@ exports.getAllUniqueCategories = (req, res) => {
     })
 }
 
+exports.getAllUniqueCities = (req, res) => {
+    Hotel.distinct("city", {}, (err, citiesArray) => {
+        if (err) {
+            return res.status(400).json({
+                error: err
+            })
+        }
+        if (!citiesArray) {
+            return res.status(404).json({
+                error: "No categories exist."
+            })
+        }
+        res.json(citiesArray)
+    })
+}
+
 exports.updateRooms = (req, res, next) => {
     let myOperations = req.body.order.hotels.map(hotel => {
         return {
