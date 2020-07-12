@@ -1,6 +1,12 @@
 # Tripster-Backend
+### This is the backend part of this Full Stack MERN project.
+#### Please find the frontend part "Tripster-Frontend" at https://github.com/nikpydev/Tripster-Frontend
 
-### A Backend to the Tripster-Frontend (Check my Repositories)
+## Requirements
+### You need the following installed on your system before you can run this project locally:-
+#### 1. NodeJS
+#### 2. NPM
+#### 3. MongoDB
 
 ## Usage →
 #### Navigate into the Tripster-Backend directory from your terminal.
